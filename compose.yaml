@@ -1,0 +1,52 @@
+services:
+  api:
+    build:
+      context: ./apps/api/
+      dockerfile: Dockerfile
+    container_name: nest-app-dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./apps/api:/app
+      - /app/node_modules
+    depends_on:
+      postgres:
+          condition: service_healthy
+    env_file:
+      - ./apps/api/.env
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    container_name: react-app-dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./apps/web:/app
+      - /app/node_modules
+    env_file:
+      - ./apps/web/.env
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres-db-dev
+    restart: always
+    environment:  
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: notes_app
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", root, "-d", notes_app]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+volumes:
+  postgres-data:
+    driver: local

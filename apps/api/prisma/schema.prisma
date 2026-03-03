@@ -1,0 +1,14 @@
+generator client {
+	provider = "prisma-client-js"
+}
+
+datasource db {
+	provider = "postgresql"
+}
+
+model Note {
+	id          String     @id @default(uuid())
+	title       String     @db.VarChar(200)
+	description String     @db.VarChar(10000)
+	createdAt   DateTime   @default(now())
+}
