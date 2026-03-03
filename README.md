@@ -1,10 +1,10 @@
 # RhinoAssignment
 
 ## Instructions
+ - Copy .env.example files into a new .env file
  - Run **docker-compose up --build** to start the project
  - Frontend: http://localhost:5173
  - Backend http://localhost:3000
- - I've provided example .env files in both the api and web folders
  - Be sure to leave the VITE_API_URL as localhost
 
 ## API Endpoints
